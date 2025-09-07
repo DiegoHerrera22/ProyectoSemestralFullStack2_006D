@@ -27,25 +27,14 @@
   </header>
   <main class="container">
 
-    <section class="hero">
-      <h1 class="script">Pastelería 1000 Sabores</h1>
-      <p>Desde 1975 endulzando momentos especiales. Explora nuestras tortas, postres y clásicos.</p>
-      <p><a class="btn" href="productos.html">Ver catálogo</a></p>
-    </section>
-    <section class="grid-3">
-      <article class="card">
-        <h3>Novedades</h3>
-        <p>Descubre sabores de temporada.</p>
-      </article>
-      <article class="card">
-        <h3>Promociones</h3>
-        <p>Descuentos para mayores de 50 y estudiantes DUOC.</p>
-      </article>
-      <article class="card">
-        <h3>Historia</h3>
-        <p>Participamos del récord de la torta más grande del mundo (1995).</p>
-      </article>
-    </section>
+    <h1>Productos</h1>
+    <div class="filters">
+      <label>Categoría
+        <select id="f-categoria"></select>
+      </label>
+      <input id="f-texto" type="search" placeholder="Buscar producto...">
+    </div>
+    <div id="grid-productos" class="grid-3"></div>
 
   </main>
   <footer class="site-footer">
