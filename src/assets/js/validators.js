@@ -6,6 +6,7 @@ function isValidEmail(email){
   const domain = email.split('@')[1].toLowerCase();
   return EMAIL_DOMAINS.some(d=> domain.endsWith(d));
 }
+
 // RUN (sin puntos ni guion) + DV
 function runDV(run){
   // Asume run limpio sin puntos/guion, puede venir con K
@@ -26,6 +27,7 @@ function isValidRUN(str){
   if(!/^[0-9]+[0-9K]$/.test(s)) return false;
   return runDV(s) === s.slice(-1);
 }
+
 /* Login */
 document.addEventListener('DOMContentLoaded',()=>{
   const flog = document.getElementById('form-login');
@@ -35,8 +37,10 @@ document.addEventListener('DOMContentLoaded',()=>{
       const email = document.getElementById('login-email').value.trim();
       const pass = document.getElementById('login-pass').value;
       const msg = document.getElementById('login-msg');
+
       if(!isValidEmail(email)){ msg.textContent='Correo inválido o dominio no permitido'; msg.style.display='block'; return; }
       if(pass.length<4 || pass.length>10){ msg.textContent='Password debe tener 4 a 10 caracteres'; msg.style.display='block'; return; }
+
       // acceso admin si email contiene @admin.cl
       if(email.toLowerCase().includes('@admin.cl')){
         location.href='admin/index.html';
@@ -45,6 +49,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       }
     });
   }
+
   const freg = document.getElementById('form-reg');
   if(freg){
     // poblar regiones/comunas
@@ -58,6 +63,8 @@ document.addEventListener('DOMContentLoaded',()=>{
       (window.REGIONES[selR.value]||[]).forEach(c=>{const o=document.createElement('option');o.textContent=c; selC.appendChild(o)});
     });
     selR.dispatchEvent(new Event('change'));
+
+    // guardar usuario en localStorage usando helpers de main.js
     freg.addEventListener('submit',(e)=>{
       e.preventDefault();
       const run = document.getElementById('run').value.trim();
@@ -66,14 +73,49 @@ document.addEventListener('DOMContentLoaded',()=>{
       const apellidos = document.getElementById('apellidos').value.trim();
       const dir = document.getElementById('direccion').value.trim();
       const msg = document.getElementById('reg-msg');
-      if(!isValidRUN(run)){ msg.textContent='RUN inválido (sin puntos/guion y DV correcto)'; msg.className='alert error'; msg.style.display='block'; return; }
-      if(!isValidEmail(correo)){ msg.textContent='Correo con dominio no permitido'; msg.className='alert error'; msg.style.display='block'; return; }
-      if(nombres.length>50 || apellidos.length>100 || dir.length>300){
-        msg.textContent='Límites: Nombres ≤50, Apellidos ≤100, Dirección ≤300'; msg.className='alert error'; msg.style.display='block'; return;
+      const tipoEl = document.getElementById('tipo'); 
+      const tipo = tipoEl ? tipoEl.value : 'cliente';
+
+      if(!isValidRUN(run)){
+        msg.textContent='RUN inválido (sin puntos/guion y DV correcto)';
+        msg.className='alert error'; msg.style.display='block'; return;
       }
-      msg.textContent='Registro enviado (demo)'; msg.className='alert'; msg.style.display='block';
+      if(!isValidEmail(correo)){
+        msg.textContent='Correo con dominio no permitido';
+        msg.className='alert error'; msg.style.display='block'; return;
+      }
+      if(nombres.length>50 || apellidos.length>100 || dir.length>300){
+        msg.textContent='Límites: Nombres ≤50, Apellidos ≤100, Dirección ≤300';
+        msg.className='alert error'; msg.style.display='block'; return;
+      }
+
+      const nuevoUsuario = {
+        run: run.toUpperCase(),
+        nombres,
+        apellidos,
+        email: correo.toLowerCase(),
+        direccion: dir,
+        region: selR.value,
+        comuna: selC.value,
+        tipo
+      };
+
+      
+      const res = (window.createUser) ? window.createUser(nuevoUsuario) : {ok:false, msg:'createUser no disponible'};
+      if(!res.ok){
+        msg.textContent = res.msg || 'No se pudo registrar';
+        msg.className='alert error'; msg.style.display='block'; return;
+      }
+
+      msg.textContent='Usuario registrado correctamente';
+      msg.className='alert'; msg.style.display='block';
+
+      // Limpia el formulario y repuebla comunas
+      e.target.reset();
+      selR.dispatchEvent(new Event('change'));
     });
   }
+
   const fcont = document.getElementById('form-contacto');
   if(fcont){
     fcont.addEventListener('submit',(e)=>{
@@ -82,9 +124,17 @@ document.addEventListener('DOMContentLoaded',()=>{
       const correo = document.getElementById('c-correo').value.trim();
       const comentario = document.getElementById('c-comentario').value.trim();
       const msg = document.getElementById('c-msg');
-      if(nombre.length===0 || comentario.length===0){ msg.textContent='Nombre y comentario son obligatorios'; msg.className='alert error'; msg.style.display='block'; return; }
-      if(correo && !isValidEmail(correo)){ msg.textContent='Correo opcional inválido'; msg.className='alert error'; msg.style.display='block'; return; }
-      msg.textContent='Mensaje enviado (demo)'; msg.className='alert'; msg.style.display='block';
+
+      if(nombre.length===0 || comentario.length===0){
+        msg.textContent='Nombre y comentario son obligatorios';
+        msg.className='alert error'; msg.style.display='block'; return;
+      }
+      if(correo && !isValidEmail(correo)){
+        msg.textContent='Correo opcional inválido';
+        msg.className='alert error'; msg.style.display='block'; return;
+      }
+      msg.textContent='Mensaje enviado (demo)';
+      msg.className='alert'; msg.style.display='block';
     });
   }
 });

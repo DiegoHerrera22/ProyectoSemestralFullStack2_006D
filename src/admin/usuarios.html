@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <title>Admin — Usuarios</title>
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="brand">🔐 Admin — 1000 Sabores</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="productos.html">Productos</a>
+      <a href="usuarios.html">Usuarios</a>
+      <a href="../index.html">Sitio</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h2>Usuarios</h2>
+  <table class="table" id="tabla-users">
+    <thead>
+      <tr><th>RUN</th><th>Nombre</th><th>Email</th><th>Región</th><th>Comuna</th><th>Tipo</th><th></th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</main>
+
+<footer><div class="container">Panel administrativo</div></footer>
+
+<script src="../assets/js/main.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const tbody = document.querySelector('#tabla-users tbody');
+  const rows = window.getUsers().map(u=>`
+    <tr>
+      <td>${u.run}</td>
+      <td>${u.nombres} ${u.apellidos}</td>
+      <td>${u.email}</td>
+      <td>${u.region}</td>
+      <td>${u.comuna}</td>
+      <td>${u.tipo}</td>
+      <td><button class="btn secondary" data-del="${u.email}">Eliminar</button></td>
+    </tr>
+  `).join('');
+  tbody.innerHTML = rows;
+
+  tbody.addEventListener('click',(e)=>{
+    const btn = e.target.closest('button[data-del]');
+    if(!btn) return;
+    const email = btn.getAttribute('data-del');
+    if(confirm('¿Eliminar usuario '+email+'?')){
+      window.deleteUser(email);
+      location.reload();
+    }
+  });
+});
+</script>
+</body>
+</html>

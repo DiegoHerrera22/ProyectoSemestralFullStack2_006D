@@ -1,65 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="assets/css/style.css">
-<title>Pastelería 1000 Sabores</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Pastelería 1000 Sabores — Registro</title>
 </head>
 <body>
-<header>
-  <div class="container">
-    <div class="brand">🍰 1000 Sabores</div>
-    <nav>
-      <a href="index.html">Inicio</a>
-      <a href="productos.html">Productos</a>
-      <a href="carrito.html">Carrito</a>
-      <a href="blog.html">Blog</a>
-      <a href="nosotros.html">Nosotros</a>
-      <a href="contacto.html">Contacto</a>
-      <a href="login.html">Login</a>
-      <a href="registro.html">Registro</a>
-    </nav>
-  </div>
-</header>
+  <header>
+    <div class="container">
+      <div class="brand">🍰 1000 Sabores</div>
+      <nav>
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="blog.html">Blog</a>
+        <a href="nosotros.html">Nosotros</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="login.html">Login</a>
+        <a href="registro.html" class="active">Registro</a>
+      </nav>
+    </div>
+  </header>
 
-<main class="container">
+  <main class="container">
+    <h2>Registro</h2>
 
-<h2>Registro</h2>
-<form id="form-reg" class="form">
-  <label>RUN (sin puntos ni guion)</label>
-  <input id="run" required minlength="7" maxlength="9" placeholder="12345678K">
-  <label>Nombres</label>
-  <input id="nombres" required maxlength="50">
-  <label>Apellidos</label>
-  <input id="apellidos" required maxlength="100">
-  <label>Correo</label>
-  <input id="correo" required maxlength="100" placeholder="usuario@duoc.cl">
-  <label>Dirección</label>
-  <input id="direccion" required maxlength="300">
-  <label>Región</label>
-  <select id="region" required></select>
-  <label>Comuna</label>
-  <select id="comuna" required></select>
-  <label>Tipo de usuario</label>
-  <select id="tipo" required>
-    <option>Cliente</option>
-    <option>Vendedor</option>
-    <option>Admin</option>
-  </select>
-  <button class="btn" type="submit">Registrarme</button>
-  <div id="reg-msg" class="alert" style="display:none;margin-top:10px"></div>
-</form>
-<script src="assets/js/validators.js"></script>
+    <form id="form-reg" class="form" novalidate>
+      <label>RUN (sin puntos ni guion)</label>
+      <input id="run" required minlength="7" maxlength="9" placeholder="12345678K" />
 
-</main>
-<footer>
-  <div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div>
-</footer>
+      <label>Nombres</label>
+      <input id="nombres" required maxlength="50" />
 
-<script src="assets/js/data.products.js"></script>
-<script src="assets/js/data.regiones.js"></script>
-<script src="assets/js/main.js"></script>
+      <label>Apellidos</label>
+      <input id="apellidos" required maxlength="100" />
+
+      <label>Correo</label>
+      <input id="correo" required maxlength="100" placeholder="usuario@duoc.cl" />
+
+      <label>Dirección</label>
+      <input id="direccion" required maxlength="300" />
+
+      <label>Región</label>
+      <select id="region" required></select>
+
+      <label>Comuna</label>
+      <select id="comuna" required></select>
+
+      <label>Tipo de usuario</label>
+      <select id="tipo" required>
+        <option value="cliente" selected>Cliente</option>
+        <option value="empresa">Empresa</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <button class="btn" type="submit">Registrarme</button>
+      <div id="reg-msg" class="alert" style="display:none;margin-top:10px"></div>
+    </form>
+  </main>
+
+  <footer>
+    <div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div>
+  </footer>
+
+  <script src="assets/js/data.products.js"></script>
+  <script src="assets/js/data.regiones.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/validators.js"></script>
 </body>
 </html>

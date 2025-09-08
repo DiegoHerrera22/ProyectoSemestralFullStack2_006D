@@ -1,6 +1,7 @@
 /* LocalStorage helpers */
 const LS_PRODUCTS_KEY = 'products';
 const LS_CART_KEY = 'cart';
+const LS_USERS_KEY = 'users';
 
 function seedProducts(){
   if(!localStorage.getItem(LS_PRODUCTS_KEY)){
@@ -14,7 +15,7 @@ function getProducts(){
 function setProducts(arr){ localStorage.setItem(LS_PRODUCTS_KEY, JSON.stringify(arr)); }
 window.getProducts = getProducts;
 
-/*  CRUD productos (Admin)  */
+/* CRUD productos (Admin) */
 function validateProduct(p, isNew){
   if(!p.codigo || p.codigo.trim().length<3) return {valid:false,message:'Código mínimo 3'};
   const list=getProducts();
@@ -34,7 +35,32 @@ function updateProduct(p){ const L=getProducts().map(x=>x.codigo===p.codigo?{...
 function deleteProduct(codigo){ const L=getProducts().filter(x=>x.codigo!==codigo); setProducts(L); }
 window.createProduct=createProduct; window.updateProduct=updateProduct; window.deleteProduct=deleteProduct;
 
-/* Carrito  */
+/* Usuarios (localStorage) */
+function getUsers(){
+  try { return JSON.parse(localStorage.getItem(LS_USERS_KEY) || '[]'); }
+  catch { return []; }
+}
+function setUsers(arr){ localStorage.setItem(LS_USERS_KEY, JSON.stringify(arr)); }
+function createUser(u){
+  const users = getUsers();
+  const email = (u.email||'').toLowerCase();
+  const run = (u.run||'').toUpperCase();
+  if(users.some(x => (x.email||'').toLowerCase() === email)) return {ok:false,msg:'Email ya registrado'};
+  if(users.some(x => (x.run||'').toUpperCase() === run)) return {ok:false,msg:'RUN ya registrado'};
+  users.push({...u, email, run});
+  setUsers(users);
+  return {ok:true};
+}
+function deleteUser(email){
+  setUsers(getUsers().filter(u => (u.email||'').toLowerCase() !== (email||'').toLowerCase()));
+}
+function updateUser(u){
+  const email = (u.email||'').toLowerCase();
+  setUsers(getUsers().map(x => (x.email||'').toLowerCase() === email ? {...x, ...u, email:(u.email||x.email).toLowerCase()} : x));
+}
+window.getUsers=getUsers; window.createUser=createUser; window.deleteUser=deleteUser; window.updateUser=updateUser;
+
+/* Carrito */
 function readCart(){ return JSON.parse(localStorage.getItem(LS_CART_KEY) || '[]'); }
 function writeCart(c){ localStorage.setItem(LS_CART_KEY, JSON.stringify(c)); }
 function addToCart(codigo){
@@ -49,11 +75,11 @@ function addToCart(codigo){
   writeCart(cart);
   updateCartBadge();
 }
+window.addToCart = addToCart;
 function cartTotal(c){ return c.reduce((s,i)=>s + i.precio*i.cantidad, 0); }
 function updateCartBadge(){
   const cart = readCart();
   const total = cart.reduce((s,i)=>s+i.cantidad,0);
-  // Busca enlace que apunte a carrito.html y añade badge
   document.querySelectorAll('a[href$="carrito.html"]').forEach(a=>{
     let b = a.querySelector('.nav-badge');
     if(!b){ b=document.createElement('span'); b.className='nav-badge'; a.appendChild(b); }
@@ -62,9 +88,9 @@ function updateCartBadge(){
 }
 window.addEventListener('storage', (e)=>{ if(e.key===LS_CART_KEY) updateCartBadge(); });
 
-/*UI: cards, listado, destacados, detalle */
+/* UI: cards, listado, destacados, detalle */
 function productLink(codigo){ return `producto.html?codigo=${encodeURIComponent(codigo)}`; }
-function safeImg(src){ return src || 'assets/img/placeholder.png'; } // crea este archivo o cámbialo por otro
+function safeImg(src){ return src || 'assets/img/placeholder.png'; }
 
 function cardHtml(p){
   return `<article class="card">
@@ -103,10 +129,10 @@ function renderListado(){
   cont.innerHTML = items.map(cardHtml).join('');
 }
 
-/* Detalle de producto (producto.html?codigo=XXX) */
+/* Detalle de producto */
 function getParam(name){ return new URLSearchParams(location.search).get(name); }
 function renderDetalle(){
-  const box = document.getElementById('detalle');
+  const box = document.getElementById('detalle') || document.getElementById('product-detail');
   if(!box) return;
   const codigo = getParam('codigo');
   const p = getProducts().find(x=>x.codigo===codigo) || getProducts()[0];
@@ -140,5 +166,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
   renderListado();
   renderDetalle();
   const clear = document.getElementById('btn-clear');
-  if(clear){ clear.addEventListener('click', ()=>{ const q=document.getElementById('q'); const c=document.getElementById('cat'); if(q) q.value=''; if(c) c.value=''; renderListado(); });}
+  if(clear){
+    clear.addEventListener('click', ()=>{
+      const q=document.getElementById('q'); const c=document.getElementById('cat');
+      if(q) q.value=''; if(c) c.value='';
+      renderListado();
+    });
+  }
 });
