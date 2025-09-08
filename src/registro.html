@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Tu CSS (tipografías/colores del caso) -->
   <link rel="stylesheet" href="assets/css/style.css" />
   <title>Pastelería 1000 Sabores — Registro</title>
 </head>
@@ -64,9 +67,117 @@
     <div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div>
   </footer>
 
+  <!-- Datos + lógica principal -->
   <script src="assets/js/data.products.js"></script>
   <script src="assets/js/data.regiones.js"></script>
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/validators.js"></script>
+
+  <!--crear/editar usuario desde registro-->
+  <script>
+    // --- Utilidades de URL ---
+    function getParam(k){ return new URLSearchParams(location.search).get(k); }
+    const fromAdmin = getParam('from') === 'admin';
+    const editEmail = (getParam('email') || '').toLowerCase();
+
+    // --- Validaciones  ---
+    const EMAIL_DOMAINS = ['duoc.cl','profesor.duoc.cl','gmail.com','admin.cl'];
+    function isValidEmail(email){
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if(!re.test(email)) return false;
+      const domain = email.split('@')[1].toLowerCase();
+      return EMAIL_DOMAINS.some(d => domain.endsWith(d));
+    }
+    function runDV(run){
+      const body = run.slice(0,-1);
+      let sum=0, mul=2;
+      for(let i=body.length-1;i>=0;i--){
+        sum += parseInt(body[i],10)*mul;
+        mul = (mul===7)?2:mul+1;
+      }
+      const res = 11 - (sum % 11);
+      return res===11?'0':(res===10?'K':String(res));
+    }
+    function isValidRUN(str){
+      const s = str.replace(/\./g,'').replace(/-/g,'').toUpperCase();
+      if(s.length<7 || s.length>9) return false;
+      if(!/^[0-9]+[0-9K]$/.test(s)) return false;
+      return runDV(s) === s.slice(-1);
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // --- Poblar Región/Comuna ---
+      const selR = document.getElementById('region');
+      const selC = document.getElementById('comuna');
+      Object.keys(window.REGIONES || {}).forEach(r => selR.appendChild(new Option(r,r)));
+      selR.addEventListener('change', ()=>{
+        selC.innerHTML = '';
+        (window.REGIONES[selR.value] || []).forEach(c => selC.appendChild(new Option(c,c)));
+      });
+      selR.dispatchEvent(new Event('change'));
+
+      
+      if(fromAdmin && editEmail){
+        const users = (window.getUsers ? window.getUsers() : JSON.parse(localStorage.getItem('users')||'[]'));
+        const u = users.find(x => (x.email||'').toLowerCase() === editEmail);
+        if(u){
+          document.getElementById('run').value = u.run || '';
+          document.getElementById('nombres').value = u.nombres || '';
+          document.getElementById('apellidos').value = u.apellidos || '';
+          document.getElementById('correo').value = u.email || '';
+          document.getElementById('direccion').value = u.direccion || '';
+          document.getElementById('tipo').value = u.tipo || 'cliente';
+          document.getElementById('region').value = u.region || '';
+          selR.dispatchEvent(new Event('change'));
+          document.getElementById('comuna').value = u.comuna || '';
+        }
+      }
+
+      // --- Envío: crear/editar en localStorage y redirigir ---
+      const form = document.getElementById('form-reg');
+      const msg  = document.getElementById('reg-msg');
+
+      form.addEventListener('submit', (e)=>{
+        e.preventDefault();
+
+        const run = document.getElementById('run').value.trim().toUpperCase();
+        const nombres = document.getElementById('nombres').value.trim();
+        const apellidos = document.getElementById('apellidos').value.trim();
+        const email = document.getElementById('correo').value.trim().toLowerCase();
+        const direccion = document.getElementById('direccion').value.trim();
+        const region = document.getElementById('region').value;
+        const comuna = document.getElementById('comuna').value;
+        const tipo = document.getElementById('tipo').value;
+
+        if(!isValidRUN(run)){
+          msg.className='alert error'; msg.textContent='RUN inválido (sin puntos/guion y DV correcto)'; msg.style.display='block'; return;
+        }
+        if(!isValidEmail(email)){
+          msg.className='alert error'; msg.textContent='Correo con dominio no permitido'; msg.style.display='block'; return;
+        }
+        if(nombres.length>50 || apellidos.length>100 || direccion.length>300){
+          msg.className='alert error'; msg.textContent='Límites: Nombres ≤50, Apellidos ≤100, Dirección ≤300'; msg.style.display='block'; return;
+        }
+
+        const payload = { run, nombres, apellidos, email, direccion, region, comuna, tipo };
+
+      
+        if(window.createUser && window.updateUser){
+          const all = window.getUsers ? window.getUsers() : [];
+          const exists = all.some(u => (u.email||'').toLowerCase() === email);
+          const res = exists ? (window.updateUser(payload), {ok:true}) : window.createUser(payload);
+          if(!res.ok){ msg.className='alert error'; msg.textContent=res.msg||'No se pudo guardar'; msg.style.display='block'; return; }
+        }else{
+          const users = JSON.parse(localStorage.getItem('users')||'[]');
+          const idx = users.findIndex(u => (u.email||'').toLowerCase() === email);
+          if(idx>=0) users[idx] = {...users[idx], ...payload};
+          else users.push(payload);
+          localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        msg.className='alert'; msg.textContent='Guardado correctamente'; msg.style.display='block';
+        setTimeout(()=>{ location.href = fromAdmin ? 'admin/usuarios.html' : 'index.html'; }, 800);
+      });
+    });
+  </script>
 </body>
 </html>

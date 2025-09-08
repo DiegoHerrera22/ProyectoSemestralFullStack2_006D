@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Pacifico&display=swap');
+
 :root{
   --bg:#FFF5E1;
+  --text:#5D4037;
   --ink:#2d2a26;
   --primary:#FFC0CB;
   --accent:#8B4513;
@@ -8,70 +11,121 @@
   --warn:#e65100;
   --err:#b71c1c;
   --radius:16px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font:'Lato', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
-  margin:0; background:var(--bg); color:var(--ink);
-  font-family:var(--font); line-height:1.5;
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  line-height:1.5;
 }
+
 .container{max-width:1100px;margin:0 auto;padding:20px}
+
 header{background:var(--primary); color:white}
 header .container{display:flex;align-items:center;justify-content:space-between}
-nav a{color:white;text-decoration:none;margin:0 10px;font-weight:600}
+
+.brand{font-family:'Pacifico', 'Lato', cursive; font-weight:400; letter-spacing:.5px; color:var(--accent)}
+h1,h2,h3{font-family:'Pacifico','Lato',cursive; color:var(--accent); margin-top:0}
+
+/* Enlaces */
+a, a:visited{color:var(--accent); text-decoration:none}
+a:hover{opacity:.85}
+/* Mantener blancos los enlaces del header y separarlos */
+nav a, nav a:visited{color:#fff}
+nav a{margin:0 12px}
 nav a:hover{text-decoration:underline}
-.brand{font-weight:900; letter-spacing:.5px}
+
 .grid{display:grid; gap:16px}
 .grid.cards{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+
 .card{
   background:white;border-radius:var(--radius);
   padding:16px; box-shadow:0 2px 10px rgba(0,0,0,.06);
   display:flex; flex-direction:column; gap:10px;
 }
 .card h3{margin:0 0 6px 0}
+/* Botón al fondo de la card */
+.card .btn:last-child{ margin-top:auto; }
+
 .badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--muted);font-size:12px}
+
 .btn{display:inline-block;padding:10px 14px;border-radius:12px;border:0;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}
 .btn.secondary{background:var(--accent)}
 .btn.ghost{background:transparent;border:1px solid var(--primary);color:var(--primary)}
 .btn:disabled{opacity:.6;cursor:not-allowed}
+
+/* Variante usada en admin/botones principales */
+.btn-pink{background:var(--primary); color:#fff; border:0; border-radius:12px; padding:10px 14px; font-weight:700}
+.btn-pink:hover{filter:brightness(.95)}
+
+/* Imágenes fluidas para Bootstrap / detalle */
+.img-fluid{max-width:100%; height:auto; display:block}
+
 input,select,textarea{
   width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;background:white
 }
 label{font-weight:700;margin-top:10px;display:block}
+
 .form{max-width:520px;margin:20px auto;background:white;border-radius:var(--radius);padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+
 .table{width:100%;border-collapse:collapse;background:white;border-radius:var(--radius);overflow:hidden}
 .table th,.table td{padding:10px;border-bottom:1px solid #eee;text-align:left}
 .table th{background:#faf6f2}
+
 .kpi{padding:10px 14px;border-left:4px solid var(--primary);background:white;border-radius:10px}
+
 .alert{padding:10px 12px;border-radius:10px;background:#fff3cd;border:1px solid #ffeeba;color:#7c4a03}
 .alert.error{background:#fdecea;border-color:#f5c2c7;color:#7a1c1c}
+
 footer{margin-top:40px;background:var(--muted);}
 footer .container{padding:20px;font-size:14px}
+
 .stock-low{background:#fff0f0}
+
 .card img{width:100%;height:160px;object-fit:cover;border-radius:12px}
+
 .product-hero{display:grid;grid-template-columns: 1fr 1fr;gap:20px}
 .product-hero img{width:100%;height:320px;object-fit:cover;border-radius:16px}
+
 .nav-badge{display:inline-block;min-width:20px;padding:2px 6px;border-radius:999px;background:#fff;color:#000;font-weight:700;margin-left:6px;text-align:center}
+
+/* --- Spacing página de inicio (PUNTO 1) --- */
+.home-intro{ margin:22px 0 30px; }   /* tarjeta "Bienvenido" */
+.home-title{ margin:14px 0 22px; }   /* título "Destacados" */
+.home-grid{  margin-top:16px;   }    /* grilla de cards */
 
 /* Móviles y tablets */
 @media (max-width: 768px){
-  /* El hero de producto pasa de 2 columnas a 1 */
   .product-hero{ grid-template-columns: 1fr; }
-
-  /* Cabecera: nav debajo del logo para que no se corte */
   header .container{ flex-direction: column; gap: 8px; }
   nav a{ display:inline-block; margin:4px 6px; }
-
-  /* Cards: acepta columnas más angostas en pantallas chicas */
   .grid.cards{ grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); }
-
-  /* Imágenes un poco más bajas en cards para no ocupar tanto */
   .card img{ height: 120px; }
+
+  /* Spacing home en móviles */
+  .home-intro{ margin:18px 0 24px; }
+  .home-title{ margin:10px 0 16px; }
+  .home-grid{  margin-top:10px; }
 }
 
 /* Pantallas grandes (mejora densidad) */
 @media (min-width: 1200px){
   .grid.cards{ grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); }
   .card img{ height: 180px; }
+}
+/* Spacing página de inicio */
+.home-intro{ margin: 22px 0 30px; }   /* tarjeta "Bienvenido" */
+.home-title{ margin: 14px 0 22px; }   /* h2 "Destacados" */
+.home-grid{  margin-top: 16px; }      /* grilla de cards */
+
+@media (max-width:768px){
+  .home-intro{ margin: 18px 0 24px; }
+  .home-title{ margin: 10px 0 16px; }
+  .home-grid{  margin-top: 10px; }
 }

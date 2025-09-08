@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="assets/css/style.css">
-<title>Pastelería 1000 Sabores</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <title>Blog — Pastelería 1000 Sabores</title>
 </head>
 <body>
 <header>
@@ -15,7 +14,7 @@
       <a href="index.html">Inicio</a>
       <a href="productos.html">Productos</a>
       <a href="carrito.html">Carrito</a>
-      <a href="blog.html">Blog</a>
+      <a href="blog.html" class="active">Blog</a>
       <a href="nosotros.html">Nosotros</a>
       <a href="contacto.html">Contacto</a>
       <a href="login.html">Login</a>
@@ -25,12 +24,47 @@
 </header>
 
 <main class="container">
-<h2>Blog</h2><ul><li><a href='blog-detalle-1.html'>Consejos para elegir tu torta</a></li><li><a href='blog-detalle-2.html'>Alternativas sin gluten</a></li></ul>
-</main>
-<footer>
-  <div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div>
-</footer>
+  <h2>Blog</h2>
 
+  <article class="card">
+    <img class="img-fluid" src="assets/img/placeholder.png" alt="Consejos para elegir tu torta">
+    <h3>Consejos para elegir tu torta</h3>
+    <p>
+      Al escoger tu torta considera tres ejes: <strong>porciones</strong>, <strong>sabores</strong> y
+      <strong>decoración</strong>. Calcula entre 120–150 g por persona para tortas tradicionales
+      y 160–180 g si llevarán rellenos frescos o varias capas. Los sabores más pedidos son
+      vainilla, chocolate, frutos rojos y manjar; si el evento es largo, prefiere combinaciones
+      menos dulces para no saturar el paladar. En decoración, una capa de crema suave resiste
+      mejor el traslado que el merengue y te permite acabados más limpios.
+    </p>
+    <p>
+      Para celebraciones al aire libre, evita cremas muy sensibles al calor y prioriza coberturas
+      con buena estabilidad. Si hay invitados con restricciones, planifica una opción
+      <em>sin gluten</em> o <em>vegana</em> en formato individual para no mezclar utensilios.
+    </p>
+  </article>
+
+  <article class="card">
+    <img class="img-fluid" src="assets/img/placeholder.png" alt="Alternativas sin gluten y veganas">
+    <h3>Alternativas sin gluten y veganas</h3>
+    <p>
+      En 1000 Sabores trabajamos recetas dedicadas para públicos con necesidades específicas.
+      Para opciones <strong>sin gluten</strong> usamos harinas certificadas (arroz, almendra y maicena),
+      evitando contaminación cruzada en la etapa de horneado y montaje. En líneas <strong>veganas</strong>
+      reemplazamos huevos por aquafaba o compota y lácteos por bebidas vegetales, logrando
+      esponjosidad y sabor equilibrado.
+    </p>
+    <p>
+      Si tu evento mezcla dietas distintas, te sugerimos <strong>porciones individuales</strong> etiquetadas
+      y un cuchillo exclusivo para esos productos. Así garantizamos seguridad y buena experiencia
+      para todas las personas invitadas.
+    </p>
+  </article>
+</main>
+
+<footer><div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div></footer>
+
+<!-- Scripts para badge de carrito y data -->
 <script src="assets/js/data.products.js"></script>
 <script src="assets/js/data.regiones.js"></script>
 <script src="assets/js/main.js"></script>

@@ -95,12 +95,12 @@ function safeImg(src){ return src || 'assets/img/placeholder.png'; }
 function cardHtml(p){
   return `<article class="card">
     <a href="${productLink(p.codigo)}">
-      <img src="${safeImg(p.img)}" alt="${p.nombre}" onerror="this.src='assets/img/placeholder.png'">
+      <img class="img-fluid" src="${safeImg(p.img)}" alt="${p.nombre}" onerror="this.src='assets/img/placeholder.png'">
     </a>
     <div class="badge">${p.categoria}</div>
     <h3><a href="${productLink(p.codigo)}">${p.nombre}</a></h3>
     <div>$${p.precio.toLocaleString('es-CL')}</div>
-    <button class="btn" data-add="${p.codigo}">Añadir</button>
+    <button class="btn mt-auto" data-add="${p.codigo}">Añadir</button>
   </article>`;
 }
 
@@ -139,7 +139,7 @@ function renderDetalle(){
   if(!p){ box.innerHTML = '<div class="alert error">Producto no encontrado</div>'; return; }
   box.innerHTML = `
     <div class="product-hero">
-      <img src="${safeImg(p.img)}" alt="${p.nombre}" onerror="this.src='assets/img/placeholder.png'">
+      <img class="img-fluid" src="${safeImg(p.img)}" alt="${p.nombre}" onerror="this.src='assets/img/placeholder.png'">
       <div class="card">
         <div class="badge">${p.categoria}</div>
         <h2>${p.nombre}</h2>

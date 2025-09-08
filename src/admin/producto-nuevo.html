@@ -3,58 +3,141 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Bootstrap  -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Tu CSS (tipografías y colores del caso) -->
 <link rel="stylesheet" href="../assets/css/style.css">
 <title>Admin — Pastelería 1000 Sabores</title>
 </head>
 <body>
 <header>
-  <div class="container">
+  <div class="container d-flex justify-content-between align-items-center py-3">
     <div class="brand">🔐 Admin — 1000 Sabores</div>
-    <nav>
+    <nav class="d-flex gap-3">
       <a href="index.html">Dashboard</a>
       <a href="productos.html">Productos</a>
+      <a href="usuarios.html">Usuarios</a>
       <a href="../index.html">Sitio</a>
     </nav>
   </div>
 </header>
-<main class="container">
 
-<h2>Nuevo producto</h2>
-<form id="form-prod" class="form">
-  <label>Código</label><input id="p-codigo" required minlength="3">
-  <label>Nombre</label><input id="p-nombre" required maxlength="100">
-  <label>Descripción (opcional)</label><textarea id="p-desc" maxlength="500"></textarea>
-  <label>Categoría</label><select id="p-cat" required></select>
-  <label>Precio</label><input id="p-precio" type="number" min="0" step="1" required>
-  <label>Stock</label><input id="p-stock" type="number" min="0" step="1" required>
-  <label>Stock crítico (opcional)</label><input id="p-crit" type="number" min="0" step="1">
-  <button class="btn" type="submit">Guardar</button>
-</form>
+<main class="container my-4">
+  <h2>Nuevo producto</h2>
+
+  <div class="row g-4">
+    <div class="col-12 col-md-6">
+      <form id="form-prod" class="card p-3">
+        <div class="mb-2">
+          <label class="form-label">Código</label>
+          <input id="p-codigo" class="form-control" required minlength="3" placeholder="Ej: TC001">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Nombre</label>
+          <input id="p-nombre" class="form-control" required maxlength="100">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Descripción (opcional)</label>
+          <textarea id="p-desc" class="form-control" maxlength="500"></textarea>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Categoría</label>
+          <select id="p-cat" class="form-select" required></select>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-6">
+            <label class="form-label">Precio</label>
+            <input id="p-precio" class="form-control" type="number" min="0" step="1" required>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Stock</label>
+            <input id="p-stock" class="form-control" type="number" min="0" step="1" required>
+          </div>
+        </div>
+
+        <div class="mb-2 mt-2">
+          <label class="form-label">Stock crítico (opcional)</label>
+          <input id="p-crit" class="form-control" type="number" min="0" step="1">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Imagen (opcional)</label>
+          <input id="p-img" class="form-control" placeholder="assets/img/products/CODIGO.jpg">
+          <div class="form-text">
+            Si se deja vacío, se usará <code>assets/img/products/&lt;codigo&gt;.jpg</code>.
+          </div>
+        </div>
+
+        <button class="btn btn-pink" type="submit">Guardar</button>
+      </form>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card p-3">
+        <div class="mb-2">Vista previa</div>
+        <img id="img-preview" class="img-fluid" src="../assets/img/placeholder.png"
+             alt="Vista previa" onerror="this.src='../assets/img/placeholder.png'">
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container py-3">Panel administrativo</div></footer>
+
 <script>
-document.addEventListener('DOMContentLoaded',()=>{
-  const sel = document.getElementById('p-cat');
-  window.CATEGORIAS.forEach(c=>{const o=document.createElement('option');o.textContent=c;sel.appendChild(o)});
-  document.getElementById('form-prod').addEventListener('submit',(e)=>{
-    e.preventDefault();
-    const nuevo = {
-      codigo: document.getElementById('p-codigo').value.trim(),
-      nombre: document.getElementById('p-nombre').value.trim(),
-      descripcion: document.getElementById('p-desc').value.trim(),
-      categoria: document.getElementById('p-cat').value,
-      precio: Number(document.getElementById('p-precio').value),
-      stock: Number(document.getElementById('p-stock').value),
-      stock_critico: document.getElementById('p-crit').value === '' ? null : Number(document.getElementById('p-crit').value)
-    };
-    const ok = window.validateProduct(nuevo, true);
-    if(!ok.valid){ alert(ok.message); return; }
-    window.createProduct(nuevo);
-    location.href='productos.html';
+  const toAdminPath = (path)=> path ? ('../' + path.replace(/^(\.\/)?/,'').replace(/^..\//,'')) : '../assets/img/placeholder.png';
+  const defaultImgFromCode = (code)=> code ? `assets/img/products/${code}.jpg` : 'assets/img/placeholder.png';
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    // Poblar categorías
+    const sel = document.getElementById('p-cat');
+    (window.CATEGORIAS || []).forEach(c=>{
+      const o=document.createElement('option'); o.value=c; o.textContent=c; sel.appendChild(o);
+    });
+
+    const codeInput = document.getElementById('p-codigo');
+    const imgInput  = document.getElementById('p-img');
+    const prev      = document.getElementById('img-preview');
+
+    function refreshPreview(){
+      const src = imgInput.value.trim() || defaultImgFromCode(codeInput.value.trim());
+      prev.src = toAdminPath(src);
+    }
+
+    // Actualiza preview al escribir código o ruta de imagen
+    codeInput.addEventListener('input', ()=>{
+      if(!imgInput.value.trim()){ imgInput.value = defaultImgFromCode(codeInput.value.trim()); }
+      refreshPreview();
+    });
+    imgInput.addEventListener('input', refreshPreview);
+    refreshPreview();
+
+    // Guardar
+    document.getElementById('form-prod').addEventListener('submit',(e)=>{
+      e.preventDefault();
+      const nuevo = {
+        codigo: codeInput.value.trim(),
+        nombre: document.getElementById('p-nombre').value.trim(),
+        descripcion: document.getElementById('p-desc').value.trim(),
+        categoria: document.getElementById('p-cat').value,
+        precio: Number(document.getElementById('p-precio').value),
+        stock: Number(document.getElementById('p-stock').value),
+        stock_critico: document.getElementById('p-crit').value === '' ? null : Number(document.getElementById('p-crit').value),
+        img: (imgInput.value.trim() || defaultImgFromCode(codeInput.value.trim()))
+      };
+      const ok = window.validateProduct ? window.validateProduct(nuevo, true) : {valid:true};
+      if(!ok.valid){ alert(ok.message); return; }
+      if(window.createProduct) window.createProduct(nuevo);
+      location.href='productos.html';
+    });
   });
-});
 </script>
 
-</main>
-<footer><div class="container">Panel administrativo</div></footer>
+<!-- Datos + lógica -->
 <script src="../assets/js/data.products.js"></script>
 <script src="../assets/js/data.regiones.js"></script>
 <script src="../assets/js/main.js"></script>
