@@ -1,85 +1,65 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pastelería 1000 Sabores</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Pastelería 1000 Sabores</title>
+
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="logo" href="index.html">1000 Sabores</a>
-      <nav class="nav">
-        <a href="productos.html">Productos</a>
-        <a href="nosotros.html">Nosotros</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
-        <a href="login.html" id="menu-login">Iniciar sesión</a>
-        <a href="registro.html" id="menu-registro">Registrarse</a>
-        <a href="carrito.html" id="menu-carrito">Carrito (<span id="cart-count">0</span>)</a>
-        <a href="admin/index.html" id="menu-admin" class="admin-only hidden">Admin</a>
-      </nav>
-    </div>
-  </header>
-  <main class="container">
+<header>
+  <div class="container">
+    <div class="brand">🍰 1000 Sabores</div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="carrito.html">Carrito</a>
+      <a href="blog.html">Blog</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="login.html">Login</a>
+      <a href="registro.html">Registro</a>
+    </nav>
+  </div>
+</header>
 
-    <h1>Registro</h1>
-    <form id="form-registro" novalidate>
-      <div class="grid-2">
-        <label>RUN (sin puntos ni guion)
-          <input name="run" maxlength="9" required>
-          <small class="hint">Ej: 19011022K</small>
-        </label>
-        <label>Nombre
-          <input name="nombre" maxlength="50" required>
-        </label>
-        <label>Apellidos
-          <input name="apellidos" maxlength="100" required>
-        </label>
-        <label>Correo
-          <input name="correo" type="email" maxlength="100" required>
-          <small class="hint">@duoc.cl, @profesor.duoc.cl o @gmail.com</small>
-        </label>
-        <label>Fecha Nacimiento
-          <input name="fecha_nac" type="date">
-        </label>
-        <label>Tipo de usuario
-          <select name="tipo_usuario">
-            <option>Cliente</option>
-            <option>Vendedor</option>
-            <option>Administrador</option>
-          </select>
-        </label>
-        <label>Región
-          <select name="region" id="sel-region"></select>
-        </label>
-        <label>Comuna
-          <select name="comuna" id="sel-comuna"></select>
-        </label>
-        <label>Dirección
-          <input name="direccion" maxlength="300" required>
-        </label>
-        <label>Contraseña
-          <input name="password" type="password" minlength="4" maxlength="10" required>
-        </label>
-      </div>
-      <button class="btn" type="submit">Crear cuenta</button>
-    </form>
+<main class="container">
 
-  </main>
-  <footer class="site-footer">
-    <div class="container">
-      <small>&copy; 2025 Pastelería 1000 Sabores</small>
-    </div>
-  </footer>
-  <script src="assets/js/data.regiones.js"></script>
-  <script src="assets/js/data.products.js"></script>
-  <script src="assets/js/cart.js"></script>
-  <script src="assets/js/validators.js"></script>
-  <script src="assets/js/main.js"></script>
+<h2>Registro</h2>
+<form id="form-reg" class="form">
+  <label>RUN (sin puntos ni guion)</label>
+  <input id="run" required minlength="7" maxlength="9" placeholder="12345678K">
+  <label>Nombres</label>
+  <input id="nombres" required maxlength="50">
+  <label>Apellidos</label>
+  <input id="apellidos" required maxlength="100">
+  <label>Correo</label>
+  <input id="correo" required maxlength="100" placeholder="usuario@duoc.cl">
+  <label>Dirección</label>
+  <input id="direccion" required maxlength="300">
+  <label>Región</label>
+  <select id="region" required></select>
+  <label>Comuna</label>
+  <select id="comuna" required></select>
+  <label>Tipo de usuario</label>
+  <select id="tipo" required>
+    <option>Cliente</option>
+    <option>Vendedor</option>
+    <option>Admin</option>
+  </select>
+  <button class="btn" type="submit">Registrarme</button>
+  <div id="reg-msg" class="alert" style="display:none;margin-top:10px"></div>
+</form>
+<script src="assets/js/validators.js"></script>
+
+</main>
+<footer>
+  <div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div>
+</footer>
+
+<script src="assets/js/data.products.js"></script>
+<script src="assets/js/data.regiones.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>

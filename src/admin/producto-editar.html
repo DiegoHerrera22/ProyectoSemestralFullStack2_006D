@@ -1,45 +1,73 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pastelería 1000 Sabores</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../assets/css/style.css">
+<title>Admin — Pastelería 1000 Sabores</title>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="logo" href="index.html">1000 Sabores</a>
-      <nav class="nav">
-        <a href="productos.html">Productos</a>
-        <a href="nosotros.html">Nosotros</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
-        <a href="login.html" id="menu-login">Iniciar sesión</a>
-        <a href="registro.html" id="menu-registro">Registrarse</a>
-        <a href="carrito.html" id="menu-carrito">Carrito (<span id="cart-count">0</span>)</a>
-        <a href="admin/index.html" id="menu-admin" class="admin-only hidden">Admin</a>
-      </nav>
-    </div>
-  </header>
-  <main class="container">
+<header>
+  <div class="container">
+    <div class="brand">🔐 Admin — 1000 Sabores</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="productos.html">Productos</a>
+      <a href="../index.html">Sitio</a>
+    </nav>
+  </div>
+</header>
+<main class="container">
 
-    <h1>Editar producto</h1>
-    <div id="editar-container"></div>
+<h2>Editar producto</h2>
+<form id="form-prod" class="form">
+  <label>Código</label><input id="p-codigo" required minlength="3" disabled>
+  <label>Nombre</label><input id="p-nombre" required maxlength="100">
+  <label>Descripción (opcional)</label><textarea id="p-desc" maxlength="500"></textarea>
+  <label>Categoría</label><select id="p-cat" required></select>
+  <label>Precio</label><input id="p-precio" type="number" min="0" step="1" required>
+  <label>Stock</label><input id="p-stock" type="number" min="0" step="1" required>
+  <label>Stock crítico (opcional)</label><input id="p-crit" type="number" min="0" step="1">
+  <button class="btn" type="submit">Guardar cambios</button>
+</form>
+<script>
+function getParam(name){return new URLSearchParams(location.search).get(name)}
+document.addEventListener('DOMContentLoaded',()=>{
+  const sel = document.getElementById('p-cat');
+  window.CATEGORIAS.forEach(c=>{const o=document.createElement('option');o.textContent=c;sel.appendChild(o)});
+  const codigo = getParam('codigo');
+  const prod = window.getProducts().find(p=>p.codigo===codigo);
+  if(!prod){ alert('No existe el producto'); location.href='productos.html'; return; }
+  document.getElementById('p-codigo').value = prod.codigo;
+  document.getElementById('p-nombre').value = prod.nombre;
+  document.getElementById('p-desc').value = prod.descripcion || '';
+  document.getElementById('p-cat').value = prod.categoria;
+  document.getElementById('p-precio').value = prod.precio;
+  document.getElementById('p-stock').value = prod.stock;
+  document.getElementById('p-crit').value = prod.stock_critico ?? '';
+  document.getElementById('form-prod').addEventListener('submit',(e)=>{
+    e.preventDefault();
+    const upd = {
+      codigo: prod.codigo,
+      nombre: document.getElementById('p-nombre').value.trim(),
+      descripcion: document.getElementById('p-desc').value.trim(),
+      categoria: document.getElementById('p-cat').value,
+      precio: Number(document.getElementById('p-precio').value),
+      stock: Number(document.getElementById('p-stock').value),
+      stock_critico: document.getElementById('p-crit').value === '' ? null : Number(document.getElementById('p-crit').value)
+    };
+    const ok = window.validateProduct(upd, false);
+    if(!ok.valid){ alert(ok.message); return; }
+    window.updateProduct(upd);
+    location.href='productos.html';
+  });
+});
+</script>
 
-  </main>
-  <footer class="site-footer">
-    <div class="container">
-      <small>&copy; 2025 Pastelería 1000 Sabores</small>
-    </div>
-  </footer>
-  <script src="../assets/js/data.regiones.js"></script>
-  <script src="../assets/js/data.products.js"></script>
-  <script src="../assets/js/cart.js"></script>
-  <script src="../assets/js/validators.js"></script>
-  <script src="../assets/js/main.js"></script>
+</main>
+<footer><div class="container">Panel administrativo</div></footer>
+<script src="../assets/js/data.products.js"></script>
+<script src="../assets/js/data.regiones.js"></script>
+<script src="../assets/js/main.js"></script>
 </body>
 </html>

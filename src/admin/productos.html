@@ -1,50 +1,64 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pastelería 1000 Sabores</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="../assets/css/style.css">
+<title>Admin — Pastelería 1000 Sabores</title>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="logo" href="index.html">1000 Sabores</a>
-      <nav class="nav">
-        <a href="productos.html">Productos</a>
-        <a href="nosotros.html">Nosotros</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
-        <a href="login.html" id="menu-login">Iniciar sesión</a>
-        <a href="registro.html" id="menu-registro">Registrarse</a>
-        <a href="carrito.html" id="menu-carrito">Carrito (<span id="cart-count">0</span>)</a>
-        <a href="admin/index.html" id="menu-admin" class="admin-only hidden">Admin</a>
-      </nav>
-    </div>
-  </header>
-  <main class="container">
+<header>
+  <div class="container">
+    <div class="brand">🔐 Admin — 1000 Sabores</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="productos.html">Productos</a>
+      <a href="../index.html">Sitio</a>
+    </nav>
+  </div>
+</header>
+<main class="container">
 
-    <h1>Productos (Admin)</h1>
-    <table class="tabla" id="tabla-admin-productos">
-      <thead>
-        <tr><th>Código</th><th>Nombre</th><th>Precio</th><th>Stock</th><th></th></tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+<h2>Productos (Admin)</h2>
+<p><a class="btn" href="producto-nuevo.html">➕ Nuevo producto</a></p>
+<table class="table" id="tabla-admin">
+  <thead><tr><th>Código</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Crítico</th><th></th></tr></thead>
+  <tbody></tbody>
+</table>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const tbody = document.querySelector('#tabla-admin tbody');
+  const prods = window.getProducts();
+  tbody.innerHTML = prods.map(p=>`
+    <tr class="${(p.stock_critico ?? -1) >= 0 && p.stock <= (p.stock_critico ?? -1) ? 'stock-low':''}">
+      <td>${p.codigo}</td>
+      <td>${p.nombre}</td>
+      <td>${p.categoria}</td>
+      <td>$${p.precio.toLocaleString('es-CL')}</td>
+      <td>${p.stock}</td>
+      <td>${p.stock_critico ?? ''}</td>
+      <td>
+        <a class="btn ghost" href="producto-editar.html?codigo=${encodeURIComponent(p.codigo)}">Editar</a>
+        <button class="btn secondary" data-del="${p.codigo}">Eliminar</button>
+      </td>
+    </tr>
+  `).join('');
+  tbody.addEventListener('click',(e)=>{
+    const btn = e.target.closest('button[data-del]');
+    if(!btn) return;
+    const codigo = btn.getAttribute('data-del');
+    if(confirm('¿Eliminar producto '+codigo+'?')){
+      window.deleteProduct(codigo);
+      location.reload();
+    }
+  });
+});
+</script>
 
-  </main>
-  <footer class="site-footer">
-    <div class="container">
-      <small>&copy; 2025 Pastelería 1000 Sabores</small>
-    </div>
-  </footer>
-  <script src="../assets/js/data.regiones.js"></script>
-  <script src="../assets/js/data.products.js"></script>
-  <script src="../assets/js/cart.js"></script>
-  <script src="../assets/js/validators.js"></script>
-  <script src="../assets/js/main.js"></script>
+</main>
+<footer><div class="container">Panel administrativo</div></footer>
+<script src="../assets/js/data.products.js"></script>
+<script src="../assets/js/data.regiones.js"></script>
+<script src="../assets/js/main.js"></script>
 </body>
 </html>

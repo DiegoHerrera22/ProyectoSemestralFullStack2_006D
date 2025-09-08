@@ -1,45 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pastelería 1000 Sabores</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Pacifico&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="assets/css/style.css">
+<title>Pastelería 1000 Sabores</title>
+
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="logo" href="index.html">1000 Sabores</a>
-      <nav class="nav">
-        <a href="productos.html">Productos</a>
-        <a href="nosotros.html">Nosotros</a>
-        <a href="blog.html">Blog</a>
-        <a href="contacto.html">Contacto</a>
-        <a href="login.html" id="menu-login">Iniciar sesión</a>
-        <a href="registro.html" id="menu-registro">Registrarse</a>
-        <a href="carrito.html" id="menu-carrito">Carrito (<span id="cart-count">0</span>)</a>
-        <a href="admin/index.html" id="menu-admin" class="admin-only hidden">Admin</a>
-      </nav>
-    </div>
-  </header>
-  <main class="container">
+<header>
+  <div class="container">
+    <div class="brand">🍰 1000 Sabores</div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="carrito.html">Carrito</a>
+      <a href="blog.html">Blog</a>
+      <a href="nosotros.html">Nosotros</a>
+      <a href="contacto.html">Contacto</a>
+      <a href="login.html">Login</a>
+      <a href="registro.html">Registro</a>
+    </nav>
+  </div>
+</header>
 
-    <div id="detalle-producto"></div>
-    <p><a href="productos.html">&larr; Volver a productos</a></p>
+<main class="container">
 
-  </main>
-  <footer class="site-footer">
-    <div class="container">
-      <small>&copy; 2025 Pastelería 1000 Sabores</small>
-    </div>
-  </footer>
-  <script src="assets/js/data.regiones.js"></script>
-  <script src="assets/js/data.products.js"></script>
-  <script src="assets/js/cart.js"></script>
-  <script src="assets/js/validators.js"></script>
-  <script src="assets/js/main.js"></script>
+<h2>Producto</h2>
+<div id="detalle" class="card"></div>
+
+</main>
+<footer>
+  <div class="container">© 2025 Pastelería 1000 Sabores — Demo EP1</div>
+</footer>
+
+<script src="assets/js/data.products.js"></script>
+<script src="assets/js/data.regiones.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>

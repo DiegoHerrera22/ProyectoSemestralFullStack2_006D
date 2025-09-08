@@ -1,12 +1,5 @@
-
-// Lista de regiones y comunas utilizadas
+// Regiones 
 window.REGIONES = {
-  "Tarapacá": [
-    "Alto Hospicio",
-    "Iquique",
-    "Pica",
-    "Pozo Almonte"
-  ],
   "Coquimbo": [
     "Andacollo",
     "Coquimbo",
@@ -54,12 +47,6 @@ window.REGIONES = {
     "Los Ángeles",
     "San Pedro de la Paz",
     "Talcahuano"
-  ],
-  "La Araucanía": [
-    "Padre Las Casas",
-    "Pucón",
-    "Temuco",
-    "Villarrica"
   ],
   "Los Ríos": [
     "La Unión",
