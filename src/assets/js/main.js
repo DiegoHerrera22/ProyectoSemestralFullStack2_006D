@@ -107,8 +107,15 @@ function cardHtml(p){
 function renderDestacados(){
   const el = document.getElementById('destacados');
   if(!el) return;
-  el.innerHTML = getProducts().slice(0,4).map(cardHtml).join('');
+
+  const list = getProducts();
+
+  const sinAzucar = list.filter(p => p.categoria === 'Productos Sin Azúcar').slice(0,2);
+  const otros = list.filter(p => !sinAzucar.some(s => s.codigo === p.codigo)).slice(0,2);
+  const items = [...sinAzucar, ...otros];
+  el.innerHTML = items.map(cardHtml).join('');
 }
+
 
 function renderListado(){
   const cont = document.getElementById('listado');
